@@ -8,7 +8,7 @@ class Order < ApplicationRecord
   enum status: { pending: 0, completed: 1, cancelled: 2 }
 
   def calculate_total_price
-    self.total_price = order_items.sum('price * quantity')
+    self.total_price = order_items.sum("price * quantity")
   end
 
   before_save :calculate_total_price
