@@ -1,0 +1,65 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore log and temp files.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep tmp/pids dir.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore storage (uploaded files)
+/storage/*
+!/storage/.keep
+
+# Ignore master key and credentials
+/config/master.key
+/config/credentials.yml.enc
+
+# Ignore .env and dotenv files
+.env
+.env.*
+!.env.example
+
+# Ignore Rails cache
+/tmp/cache
+/public/assets
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+.byebug_history
+
+# Ignore database files (SQLite, in case you switch)
+*.sqlite3
+*.sqlite3-journal
+
+# Ignore Docker build artifacts
+**/tmp/build
+
+# Ignore system-specific files
+.DS_Store
+.idea
+.vscode
+*.swp
+
+# Ignore coverage reports
+/coverage
+
+# Ignore node_modules if you have webpacker or node
+/node_modules
+
+# Ignore any postgres dump files
+*.dump
+
+# Ignore webpacker / js builds
+/public/packs-test
+/public/packs
+
+# Ignore any personal/editor files
+*.iml
+*.sublime*
