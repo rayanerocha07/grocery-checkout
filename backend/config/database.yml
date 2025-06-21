@@ -22,7 +22,7 @@ default: &default
 
 development:
   <<: *default
-  database: app_test
+  database: app_development
   username: postgres
   password: postgres
   host: db
@@ -60,7 +60,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: app_development
+  database: app_test
   username: postgres
   password: postgres
   host: db
