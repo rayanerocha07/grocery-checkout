@@ -4,11 +4,11 @@ class Api::V1::OrdersController < ApplicationController
   def index
     @orders = Order.includes(:order_items).order(created_at: :desc).all
 
-    render json: @orders.as_json(include: { order_items: { only: [:product_id, :quantity, :unit_price] } }), status: :ok
+    render json: @orders.as_json(include: { order_items: { only: [ :product_id, :quantity, :unit_price ] } }), status: :ok
   end
 
   def show
-    render json: @order.as_json(include: { order_items: { only: [:product_id, :quantity, :unit_price] } }), status: :ok
+    render json: @order.as_json(include: { order_items: { only: [ :product_id, :quantity, :unit_price ] } }), status: :ok
   end
 
   def create
@@ -38,8 +38,6 @@ class Api::V1::OrdersController < ApplicationController
 
   def set_order
     @order = Order.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Order not found" }, status: :not_found
   end
 
   def order_params
