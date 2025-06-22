@@ -2,13 +2,13 @@ class Api::V1::OrdersController < ApplicationController
   before_action :set_order, only: [ :show, :update, :destroy ]
 
   def index
-    @orders = Order.all
+    @orders = Order.includes(:order_items).order(created_at: :desc).all
 
-    render json: @orders, status: :ok
+    render json: @orders.as_json(include: { order_items: { only: [:product_id, :quantity, :unit_price] } }), status: :ok
   end
 
   def show
-    render json: @order, status: :ok
+    render json: @order.as_json(include: { order_items: { only: [:product_id, :quantity, :unit_price] } }), status: :ok
   end
 
   def create
@@ -43,6 +43,6 @@ class Api::V1::OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:user_id, order_items_attributes: [ :product_id, :quantity, :unit_price ])
+    params.require(:order).permit(:user_id, :status, order_items_attributes: [ :product_id, :quantity, :unit_price ])
   end
 end
