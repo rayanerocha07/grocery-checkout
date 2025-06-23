@@ -10,10 +10,14 @@ class OrderItem < ApplicationRecord
   after_save :update_order_total_price
   after_destroy :update_order_total_price if :order
 
+  def item_total
+    unit_price * quantity
+  end
+
   private
 
   def set_unit_price
-    self.unit_price ||= product.price if product.present?
+    self.unit_price = product.price if product
   end
 
   def update_order_total_price

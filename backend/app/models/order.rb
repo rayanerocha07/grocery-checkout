@@ -13,9 +13,8 @@ class Order < ApplicationRecord
   }, default: :pending, suffix: true
 
   def calculate_total_price
-      total = order_items.sum("unit_price * quantity")
-      self.total_price = total
-    end
+    self.total_price = order_items.sum { |item| item.unit_price * item.quantity }
+  end
 
   before_save :calculate_total_price
 end

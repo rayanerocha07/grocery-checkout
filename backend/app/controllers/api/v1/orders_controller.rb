@@ -4,11 +4,11 @@ class Api::V1::OrdersController < ApplicationController
   def index
     @orders = Order.includes(:order_items).order(created_at: :desc).all
 
-    render json: @orders.as_json(include: { order_items: { only: [ :product_id, :quantity, :unit_price ] } }), status: :ok
+    render json: @orders, status: :ok
   end
 
   def show
-    render json: @order.as_json(include: { order_items: { only: [ :product_id, :quantity, :unit_price ] } }), status: :ok
+    render json: @order, status: :ok
   end
 
   def create
