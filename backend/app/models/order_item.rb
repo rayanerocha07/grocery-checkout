@@ -6,7 +6,7 @@ class OrderItem < ApplicationRecord
 
   validates :product_id, presence: true
   validates :quantity, numericality: { greater_than: 0 }
-  validates :unit_price, numericality: { greater_than_or_equal_to: 0 }
+  validates :unit_price, numericality: { greater_than: 0 }
 
   before_save :set_unit_price
   after_save :update_order_total_price
