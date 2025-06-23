@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::OrderItemsController < ApplicationController
   before_action :set_order_item, only: [ :show, :update, :destroy ]
 
