@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class Api::V1::OrderItemsController < ApplicationController
-  before_action :set_order_item, only: [ :show, :update, :destroy ]
+  before_action :set_order, only: [ :create, :update, :destroy ]
+  before_action :set_order_item, only: [ :update, :destroy ]
+  before_action :set_standalone_order_item, only: [ :show ]
 
   def index
     @order_items = OrderItem.all
@@ -13,7 +15,7 @@ class Api::V1::OrderItemsController < ApplicationController
   end
 
   def create
-    @order_item = OrderItem.new(order_item_params)
+    @order_item = @order.order_items.new(order_item_params)
 
     if @order_item.save
       render json: @order_item, status: :created
@@ -37,11 +39,19 @@ class Api::V1::OrderItemsController < ApplicationController
 
   private
 
+  def set_order
+    @order = Order.find(params[:order_id])
+  end
+
   def set_order_item
+    @order_item = @order.order_items.find(params[:id])
+  end
+
+  def set_standalone_order_item
     @order_item = OrderItem.find(params[:id])
   end
 
   def order_item_params
-    params.require(:order_item).permit(:product_id, :quantity, :unit_price, :order_id)
+    params.require(:order_item).permit(:product_id, :quantity)
   end
 end

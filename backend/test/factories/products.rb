@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :product do
-    name { "Produto Teste" }
-    price { 10.0 }
+    name { Faker::Commerce.product_name }
+    price { Faker::Commerce.price(range: 1.0..1000.0) }
   end
 end

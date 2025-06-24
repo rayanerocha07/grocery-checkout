@@ -2,9 +2,7 @@
 
 FactoryBot.define do
   factory :order_item do
-    association :product
-    association :order
-    quantity { 2 }
-    unit_price { 9.99 }
+    product
+    quantity { Faker::Number.between(from: 1, to: 5) }
   end
 end

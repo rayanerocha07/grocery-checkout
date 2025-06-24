@@ -20,8 +20,21 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_create_order
-    assert_difference("Order.count") do
-      post api_v1_orders_url, params: { order: { user_id: @order.user_id, status: @order.status } }, as: :json
+    product = create(:product)
+
+    valid_order_params = {
+      order: {
+        order_items_attributes: [
+          {
+            product_id: product.id,
+            quantity: 2
+          }
+        ]
+      }
+    }
+
+    assert_difference([ "Order.count", "OrderItem.count" ], 1) do
+      post api_v1_orders_url, params: valid_order_params, as: :json
     end
 
     assert_response :created

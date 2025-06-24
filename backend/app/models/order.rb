@@ -2,7 +2,7 @@
 
 class Order < ApplicationRecord
   belongs_to :user, optional: true
-  has_many :order_items, dependent: :destroy
+  has_many :order_items, dependent: :destroy, inverse_of: :order
 
   accepts_nested_attributes_for :order_items
 
@@ -17,10 +17,10 @@ class Order < ApplicationRecord
   }, default: :pending, suffix: true
 
   def calculate_total_price
-    self.total_price = order_items.sum("quantity * unit_price")
+    self.total_price = order_items.reject(&:marked_for_destruction?).sum(&:item_total)
   end
 
-  before_save :calculate_total_price
+  before_validation :calculate_total_price
 
   private
   def must_have_order_items

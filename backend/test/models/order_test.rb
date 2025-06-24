@@ -1,47 +1,43 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class OrderTest < ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
 
-  def setup
-    @order = build(:order)
-    @product = create(:product)
-    @order.order_items << build(:order_item, product: @product, order: @order)
-    @order.save!
+  def test_is_valid_with_default_factory_attributes
+    order = build(:order)
+    assert order.valid?
   end
 
-
-  def test_valid_order
-    assert @order.valid?
+  def test_is_invalid_without_a_status
+    order = build(:order, status: nil)
+    assert_not order.valid?
+    assert_includes order.errors[:status], "can't be blank"
   end
 
-  def test_invalid_without_status
-    @order.status = nil
-    assert_not @order.valid?
-    assert_includes @order.errors[:status], "can't be blank"
+  def test_is_invalid_without_order_items
+    order = build(:order)
+    order.order_items.clear
+
+    assert_not order.valid?
+    assert_includes order.errors[:order_items], "must exist"
+    assert_includes order.errors[:total_price], "must be greater than 0"
   end
 
-  def test_invalid_without_total_price
-    @order.total_price = nil
-    assert_not @order.valid?
-    assert_includes @order.errors[:total_price], "is not a number"
-  end
+  def test_calculates_total_price_correctly_before_saving
+    product1 = create(:product, price: 10.00)
+    product2 = create(:product, price: 5.50)
 
-  def test_invalid_with_negative_total_price
-    @order.total_price = -1.0
-    assert_not @order.valid?
-    assert_includes @order.errors[:total_price], "must be greater than 0"
-  end
+    order = build(:order)
+    order.order_items.clear
 
-  def test_invalid_with_zero_total_price
-    @order.total_price = 0.0
-    assert_not @order.valid?
-    assert_includes @order.errors[:total_price], "must be greater than 0"
-  end
+    order.order_items.build(product: product1, quantity: 2)
+    order.order_items.build(product: product2, quantity: 3)
 
-  def test_invalid_without_order_items
-    @order.order_items.destroy_all
-    assert_not @order.valid?
-    assert_includes @order.errors[:order_items], "must exist"
+    order.save!
+
+    expected_total = 36.50
+    assert_in_delta expected_total, order.total_price, 0.01
   end
 end
