@@ -6,6 +6,7 @@ RSpec.describe 'API V1 Orders', type: :request do
   path '/api/v1/orders' do
     get 'List all orders' do
       tags 'Orders'
+      security [ bearer_auth: [] ]
       produces 'application/json'
 
       response '200', 'ok' do
@@ -16,6 +17,7 @@ RSpec.describe 'API V1 Orders', type: :request do
 
     post 'Create an order' do
       tags 'Orders'
+      security [ bearer_auth: [] ]
       consumes 'application/json'
       parameter name: :order, in: :body, schema: {
         type: :object,
@@ -62,6 +64,7 @@ RSpec.describe 'API V1 Orders', type: :request do
 
     get 'Show an order by ID' do
       tags 'Orders'
+      security [ bearer_auth: [] ]
       produces 'application/json'
 
       response '200', 'ok' do
@@ -78,6 +81,7 @@ RSpec.describe 'API V1 Orders', type: :request do
 
     patch 'Update an order' do
       tags 'Orders'
+      security [ bearer_auth: [] ]
       consumes 'application/json'
       parameter name: :order, in: :body, schema: {
         type: :object,
@@ -102,6 +106,7 @@ RSpec.describe 'API V1 Orders', type: :request do
 
     delete 'Delete an order' do
       tags 'Orders'
+      security [ bearer_auth: [] ]
 
       response '204', 'Order deleted' do
         let!(:order) { create(:order) }

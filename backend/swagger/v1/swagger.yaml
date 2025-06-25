@@ -9,6 +9,8 @@ paths:
       summary: List all orders
       tags:
       - Orders
+      security:
+      - bearer_auth: []
       responses:
         '200':
           description: ok
@@ -16,6 +18,8 @@ paths:
       summary: Create an order
       tags:
       - Orders
+      security:
+      - bearer_auth: []
       parameters: []
       responses:
         '201':
@@ -56,6 +60,8 @@ paths:
       summary: Show an order by ID
       tags:
       - Orders
+      security:
+      - bearer_auth: []
       responses:
         '200':
           description: ok
@@ -65,6 +71,8 @@ paths:
       summary: Update an order
       tags:
       - Orders
+      security:
+      - bearer_auth: []
       parameters: []
       responses:
         '200':
@@ -85,6 +93,8 @@ paths:
       summary: Delete an order
       tags:
       - Orders
+      security:
+      - bearer_auth: []
       responses:
         '204':
           description: Order deleted
