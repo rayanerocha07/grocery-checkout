@@ -20,14 +20,14 @@ RSpec.describe 'API V1 Orders', type: :request do
       parameter name: :order, in: :body, schema: {
         type: :object,
         properties: {
-          status: { type: :string, nullable: true },
           order_items_attributes: {
             type: :array,
             items: {
               type: :object,
               properties: {
                 product_id: { type: :integer },
-                quantity: { type: :integer }
+                quantity: { type: :integer },
+                unit_price: { type: :integer }
               },
               required: %w[product_id quantity]
             }
@@ -60,7 +60,7 @@ RSpec.describe 'API V1 Orders', type: :request do
   path '/api/v1/orders/{id}' do
     parameter name: :id, in: :path, type: :string, description: 'Order ID'
 
-    get 'Show an order' do
+    get 'Show an order by ID' do
       tags 'Orders'
       produces 'application/json'
 
