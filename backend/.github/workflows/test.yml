@@ -1,0 +1,55 @@
+name: Build, Lint & Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build_lint_test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build backend Docker image
+        working-directory: ./backend
+        run: docker build -t my-backend .
+
+      - name: Run Rubocop linter inside container
+        working-directory: ./backend
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/backend:/app \
+            -w /app my-backend \
+            bundle exec rubocop
+
+      - name: Run Rails tests inside container
+        working-directory: ./backend
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@db:5432/app_test
+        run: |
+          docker run --rm --network host \
+            -e RAILS_ENV=test \
+            -e DATABASE_URL=$DATABASE_URL \
+            -v ${{ github.workspace }}/backend:/app \
+            -w /app my-backend \
+            bash -c "bundle exec rails db:create db:schema:load db:test:prepare && bundle exec rails test"
