@@ -47,7 +47,8 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@db:5432/app_test
         run: |
-          docker run --rm --network host \
+          docker run --rm \
+            --network grocery-checkout_default \
             -e RAILS_ENV=test \
             -e DATABASE_URL=$DATABASE_URL \
             -v ${{ github.workspace }}/backend:/app \
